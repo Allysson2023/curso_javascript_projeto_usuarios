@@ -1,30 +1,21 @@
-var nome = document.querySelector("#exampleInputName");
-var masculino = document.querySelectorAll("#form-user-create [name=gender]:checked");
-var nascimento = document.querySelector("#exampleInputBirth");
-var pais = document.querySelector("#exampleInputCountry");
-var email = document.querySelector("#exampleInputEmail");
-var senha = document.querySelector("#exampleInputPassword");
-var files = document.querySelector("#exampleInputFile"); 
-var admin = document.querySelector("#exampleInputAdmin");
-
-
 var fields = document.querySelectorAll("#form-user-create [name]");
+var user = {};
 
 fields.forEach(function(field){
 
     if(field.name == "gender"){
 
         if (field.checked){
-            console.log("Sim", field);
+            user[field.name] = field.value;
         }
 
         
     }else {
-        console.log("Não");
+        user[field.name] = field.value;
         
     }
 
-    //console.log(field.name);
     
-
+    
 });
+console.log(user);
