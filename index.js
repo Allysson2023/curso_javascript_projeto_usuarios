@@ -12,7 +12,19 @@ var fields = document.querySelectorAll("#form-user-create [name]");
 
 fields.forEach(function(field){
 
-    console.log(field.id);
+    if(field.name == "gender"){
+
+        if (field.checked){
+            console.log("Sim", field);
+        }
+
+        
+    }else {
+        console.log("Não");
+        
+    }
+
+    //console.log(field.name);
     
 
 });
