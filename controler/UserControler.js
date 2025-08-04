@@ -29,7 +29,7 @@ class UserControler {
 
             this.formEl.reset();
 
-            btn.desabled = false;
+            btn.disabled = false;
 
         }, (e)=>{
 
@@ -71,7 +71,7 @@ class UserControler {
                 fileReader.readAsDataURL(file);
             }else{
                 resolve('dist/img/boxed-bg.jpg');
-            }
+            };
 
         });    
 
