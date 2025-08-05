@@ -21,6 +21,8 @@ class UserControler {
         
         let values = this.getValues();
 
+        if(!values) return false;
+
         this.getPhoto().then((content)=>{
 
             values.photo = content;
@@ -82,39 +84,54 @@ class UserControler {
 
         let user = {};
 
+        let isValid = true;
+
         [...this.formEl.elements].forEach(function(field, index){
 
-        if(field.name == "gender"){
+            // Validando o Formularios...
+            if(['name', 'email', 'password'].indexOf(field.name) > -1 && !field.value){
+                field.parentElement.classList.add('has-error');
+                isValid = false;
+            }
 
-           if (field.checked){
-                user[field.name] = field.value;
-           }
+            if(field.name == "gender"){
 
-        } else if(field.name == "admin"){
+            if (field.checked){
+                 user[field.name] = field.value;
+            }
 
-            user[field.name] = field.checked;
+            } else if(field.name == "admin"){
 
-        } else {
-            user[field.name] = field.value;  
-        }    
+                user[field.name] = field.checked;
 
-    });
+            } else {
+                user[field.name] = field.value;  
+            }
+        
+            });
 
-    return new User(
-        user.name, 
-        user.gender, 
-        user.birth, 
-        user.country, 
-        user.email, 
-        user.password, 
-        user.photo, 
-        user.admin
-    );
-    }
+            if(!isValid){
+                alert('Preencha os campos obrigatorios...!');
+                return false;
+            }
+
+            return new User(
+                user.name, 
+                user.gender, 
+                user.birth, 
+                user.country, 
+                user.email, 
+                user.password, 
+                user.photo, 
+                user.admin
+            );
+            }
 
     addLine(dataUser){
 
         let tr = document.createElement('tr');
+
+        tr.dataset.user = JSON.stringify(dataUser);
 
         tr.innerHTML =  `
         
@@ -122,17 +139,40 @@ class UserControler {
             <td> ${dataUser.name} </td>
             <td> ${dataUser.email} </td>
             <td> ${(dataUser.admin)? 'Sim': 'Não'} </td>
-            <td> ${dataUser.birth} </td>
+            <td> ${Utils.dateFormat(dataUser.register)} </td>
             <td>
                 <button type="button" class="btn btn-primary btn-xs btn-flat">Editar</button>
                 <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
             </td>
         `;
 
-
         this.tableEl.appendChild(tr);
-    
-};
 
+        this.updateCount();
+
+    };
+
+    // atualizando  box
+    // atualizando as estaticas
+    updateCount(){
+
+        let numberUsers = 0;
+        let numberAdmin = 0;
+
+        [...this.tableEl.children].forEach(tr=>{
+            
+            numberUsers++;
+
+            let user = JSON.parse(tr.dataset.user);
+
+            if(user._admin) numberAdmin++;
+            
+
+        });
+
+        document.querySelector("#number-users").innerHTML = numberUsers;
+        document.querySelector("#number-users-admin").innerHTML = numberAdmin;
+
+    }
 
 };
