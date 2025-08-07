@@ -6,8 +6,18 @@ class UserControler {
         this.tableEl = document.getElementById(tableEl);
 
         this.onSubmit();
-    
+        this.onEdit();
     }
+
+    onEdit(){
+
+        document.querySelector("#box-user-update .btn-cancel").addEventListener("click", r=>{
+
+            this.showPanelCreate();
+            
+        });
+
+    };
 
     onSubmit(){
 
@@ -147,11 +157,41 @@ class UserControler {
         `;
 
         tr.querySelector(".btn-edit").addEventListener("click", e=>{
-            //console.log(JSON.parse(tr.dataset.user));
-            console.log(tr);
+
+            let json = JSON.parse(tr.dataset.user);
+
+            let form = document.querySelector("#form-user-update");
+
+            for (let name in json) {
+                let field = form.querySelector("[name=" + name.replace("_", "") + "]");
+                
+
+                if (field) {
+                   
+                    switch (field.type){
+                        case 'file':
+                            continue;
+
+                        case 'radio':
+                            field = form.querySelector("[name=" + name.replace("_", "") + "][value=" + json[name] + "]");
+                            field.checked = true;
+                        break;
+
+                        case 'checkbox':
+                            field.checked = json[name];
+                        break;
+
+                        default:
+                            field.value = json[name];
+
+                    }
+
+                };
+
+            };
+
+            this.showPanelUpdate();
             
-            //document.querySelector("#box-user-create").style.display = "nome";
-            //document.querySelector("box-user-update").style.display = "block";
             
         });
 
@@ -159,6 +199,19 @@ class UserControler {
 
         this.updateCount();
 
+    };
+
+    showPanelCreate(){
+
+        document.querySelector("#box-user-create").style.display = "block";
+        document.querySelector("#box-user-update").style.display = "none";
+
+    };
+    showPanelUpdate(){
+
+        document.querySelector("#box-user-create").style.display = "none";
+        document.querySelector("#box-user-update").style.display = "block";
+        
     };
 
     // atualizando  box
